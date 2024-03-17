@@ -1,0 +1,38 @@
+﻿@page "/login"
+@using Application.DTOs.Auth
+@using WebUI.States
+<h3>LoginPage</h3>
+@if (!string.IsNullOrEmpty(Message))
+{
+    <p class="text-danger">@Message</p>
+}
+<form @onsubmit="LoginAsync">
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" @bind="loginModel.Email" required />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" @bind="loginModel.Password" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+@code {
+    string? Message = string.Empty;
+    LoginDTO loginModel = new();
+    async Task LoginAsync()
+    {
+        var result = await AccountService.LoginAccountAsync(loginModel);
+        if(result.Flag)
+        {
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(result.Token);
+            NavManager.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            Message = result.Message;
+        }
+    }
+
+}

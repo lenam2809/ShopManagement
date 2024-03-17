@@ -49,11 +49,9 @@ namespace Infrastructure.Repo
             var userClaims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Name!),
-                new Claim(ClaimTypes.NameIdentifier, user.Email!)
+                new Claim(ClaimTypes.Name, user.Name!),
+                new Claim(ClaimTypes.Email, user.Email!)
             };
-
-
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
