@@ -42,6 +42,7 @@ namespace Infrastructure.DependencyInjection
             });
 
             services.AddScoped<IUser, UserRepo>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
